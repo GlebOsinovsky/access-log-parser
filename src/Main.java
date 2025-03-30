@@ -8,23 +8,37 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        Line line1 = new Line(new Point(1,3),new Point(5,8));
-        Line line2 = new Line(10,11,15,19);
-        Line line3 = new Line(line1.endPoint,line2.startPoint);
-        System.out.println("Длина линии 1: "+line1.getLenght());
-        System.out.println("Линия 2 до изменений: "+line2);
-        System.out.println("Линия 3 до изменений: "+ line3);
-        System.out.println("Суммарная длина всех 3х линий:"+" "+(line1.getLenght()+line2.getLenght()+line3.getLenght()));
+        Point a = new Point(1,5);
+        Point b = new Point(2,8);
+        Point c = new Point(5,3);
+        Point d = new Point(8,9);
 
-       line3.startPoint.x =12;
-        line3.startPoint.y =13;
-        line3.endPoint.x =16;
-        line3.endPoint.y =17;
 
-        System.out.println("линия 3 после изменений: "+line3);
-        System.out.println("линия 2 после изменений: "+line2);
+        System.out.println("До изменения точки{2,8}");
+        PolyLine poliLine = new PolyLine(a,b,c,d);
+        System.out.println(poliLine);
+        System.out.println("Длина ломаной: "+poliLine.getLength());
+        Line[] lines = poliLine.getLines();
+        System.out.println("Массив линий: "+Arrays.toString(lines));
+        System.out.println("Длина массива линий: "+ lines.length);
+        double linesLength = 0.0;
+        for (Line line : lines) {
+            linesLength += line.getLength();
+        }
+        System.out.println("Сумма длин линий: "+ linesLength);
+        double polyLength = poliLine.getLength();
+        System.out.println("Длины совпадают: " + (polyLength == linesLength));
+
+        System.out.println(" ");
+        System.out.println("После изменения точки{2,8} на {12,8}");
+        b.x = 12;
+        System.out.println("Изменения в точке"+b);
+        System.out.println(poliLine);
+        System.out.println("Изменения в ломаной: "+poliLine);
+        System.out.println("Изменения в 2х линиях массива: "+Arrays.toString(lines));
+
+
     }
 }
-
 
 
