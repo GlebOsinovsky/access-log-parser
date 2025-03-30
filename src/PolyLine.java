@@ -33,16 +33,7 @@ public class PolyLine {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("Ломаная линия [");
-        //        return "Ломаная Линия"+ points ;
-        for (int i = 0; i < points.size(); i++) {
-            str.append(points.get(i));
-            if (i != points.size() -1) {
-                str.append(",");
-            }
-        }
-        str.append("]");
-        return str.toString();
+                return "Ломаная Линия: "+ points ;
     }
 }
 
