@@ -27,21 +27,4 @@ public class Main {
 }
 
 
-//        Point a = new Point(1,3);
-//        Point b = new Point(1,3);
-//        Point c = new Point(5,8);
-//     System.out.println(a);
-//     System.out.println(b);
-//     System.out.println(c);
-//     System.out.println(a==b);
-//     System.out.println(a==c);
-//     Name k = new Name(null,"seena", "wait");
-//     Name j = Name.ofPersonalNameAndPatronomic("asd","sd");
-//        System.out.println(k);
-//        System.out.println(j);
-//    A m = A.of(null);
-//    A n = A.ofnul(null);
-//    A x = A.of("txt");
-//        System.out.println(m);
-//        System.out.println(n);
-//        System.out.println(x);
+
