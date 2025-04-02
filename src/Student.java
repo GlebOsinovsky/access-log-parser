@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Student {
-    private String name = "";
+    private final String name;
     private ArrayList <Integer> grades ;
 
     public Student(String name) {
@@ -11,7 +11,10 @@ public class Student {
 
     public Student(String name, ArrayList<Integer> grades) {
         this.name =name;
+        for (Integer grade : grades) {
+            if (grade<2 || grade>5) throw new IllegalArgumentException("Оценка долдна быть от 2 до 5");
         this.grades = new ArrayList<>(grades);
+        }
     }
 
     public String getName() {
