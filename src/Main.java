@@ -6,24 +6,35 @@ import java.util.Scanner;
 
 
 public class Main {
+
     public static void main(String[] args) {
+        Point a = new Point(1, 5);
+        Point b = new Point(2, 8);
+        Point c = new Point(5, 3);
+        Point d = new Point(8, 9);
 
-        Point a = new Point(1,5);
-        Point b = new Point(2,8);
-        Point c = new Point(5,3);
-        Point d = new Point(8,9);
+        PolyLine polyLine = new PolyLine(a, b, c, d);
+//        System.out.println(polyLine);
+//        System.out.println("Длина ломаной: " + polyLine.getLength());
+
+        Line line = new Line(d, a);
+//        System.out.println("Длина замыкающей линии " + line.getLength());
+
+        ClosedPolyLine closedPolyLine = new ClosedPolyLine(a, b, c, d);
+//        System.out.println("Длина замкнутой: " + closedPolyLine.getLength());
+//        System.out.println(closedPolyLine);
 
 
-        PolyLine polyLine = new PolyLine(a,b,c,d);
-        System.out.println(polyLine);
-        System.out.println("Длина ломаной: "+polyLine.getLength());
-        Line line = new Line(d,a);
-        System.out.println("Длина замыкающей линии "+line.getLength());
-
-        ClosedPolyLine closedPolyLine = new ClosedPolyLine(a,b,c,d);
-        System.out.println("Длина замкнутой: "+closedPolyLine.getLength());
-
+        Measurable[] shapes ={polyLine,closedPolyLine};
+        printLengths(shapes);
+    }
+    public static void printLengths(Measurable[] measurables){
+        for (Measurable m:measurables){
+            System.out.println(m+" Длина: "+m.getLength());
+        }
     }
 }
+
+
 
 
