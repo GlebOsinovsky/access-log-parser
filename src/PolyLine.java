@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class PolyLine {
+public class PolyLine implements Measurable{
     ArrayList<Point> points;
 
     public PolyLine() {
@@ -33,8 +33,6 @@ public class PolyLine {
 
     @Override
     public String toString() {
-                return "Ломаная Линия: "+ points ;
+        return "Ломаная Линия: "+ points ;
     }
 }
-
-
