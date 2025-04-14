@@ -1,5 +1,4 @@
-
-import javafx.scene.shape.LineTo;
+package ru.courses.geometry;
 
 public class ClosedPolyLine extends PolyLine {
 

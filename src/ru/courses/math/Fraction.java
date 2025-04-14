@@ -1,3 +1,5 @@
+package ru.courses.math;
+
 public class Fraction extends Number {
    private final int numerator;
    private final int denominator;

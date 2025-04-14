@@ -1,3 +1,5 @@
+package ru.courses.geometry;
+
 public class Point3D extends Point{
     int z;
 
@@ -8,7 +10,7 @@ public class Point3D extends Point{
 
     @Override
     public String toString() {
-        return "Point3D{" +
+        return "ru.courses.geometry.Point3D{" +
                 "x=" + x +
                 ", y=" + y +
                 ", z=" + z +

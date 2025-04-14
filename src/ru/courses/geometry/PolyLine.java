@@ -1,3 +1,5 @@
+package ru.courses.geometry;
+
 import java.util.ArrayList;
 
 public class PolyLine implements Measurable{

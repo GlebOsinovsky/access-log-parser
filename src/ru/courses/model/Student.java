@@ -1,3 +1,5 @@
+package ru.courses.model;
+
 import java.util.ArrayList;
 
 public class Student {

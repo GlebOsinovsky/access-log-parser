@@ -1,8 +1,6 @@
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+package ru.courses.main;
+
+import ru.courses.math.Fraction;
 
 
 public class Main {
