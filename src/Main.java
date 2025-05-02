@@ -9,7 +9,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Statistics stats = new Statistics();
+
         HashSet<String>pages = stats.getPages();
+        HashSet<String> notFoundPages= stats.getNotFoundPages();
 
         Scanner scanner = new Scanner(System.in);
         String filePath;
@@ -59,6 +61,7 @@ public class Main {
                     System.out.println("Средний трафик в час: " + stats.getTrafficRate() + " байт/час");
                     //    закомментировано так как переполняет окно вывода
                     //    System.out.println("Страницы с кодом 200: " + pages);
+                    System.out.println("Страницы с кодом 404: " + notFoundPages);
 
                     HashMap<String, Double> osStats = stats.getOsStatistic();
                     for (Map.Entry<String, Double> entry : osStats.entrySet()) {
@@ -66,6 +69,13 @@ public class Main {
                         double ratio = entry.getValue();
                         System.out.println("ОС: " + os + ", Доля: " + ratio);
                     }
+                    HashMap<String,Double> browserStats = stats.getBrowserStatistic();
+                    for (Map.Entry<String,Double> entry : browserStats.entrySet()){
+                        String browser = entry.getKey();
+                        double ratio = entry.getValue();
+                        System.out.println("Браузер " + browser+ ", Доля: "+ ratio);
+                    }
+
                     System.out.println("----------");
 
                 } catch (LongLineException e){System.err.println(e.getMessage());

@@ -22,7 +22,7 @@ public class UserAgent {
         if (lowBrowser.contains("edg/")||lowBrowser.contains("edge")){ return "Edge";}
         else if (lowBrowser.contains("firefox/")) {return "Firefox";}
         else if (lowBrowser.contains("chrome/")) {return "Chrome";}
-        else if (lowBrowser.contains("opera/")||lowBrowser.contains("opr/")) { return "Opera";}
+        else if (lowBrowser.contains("opera/") || lowBrowser.contains("opr/")) { return "Opera";}
         else {return "Other";}
     }
 
