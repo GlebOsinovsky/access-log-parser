@@ -1,11 +1,15 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Statistics stats = new Statistics();
+        HashSet<String>pages = stats.getPages();
+
         Scanner scanner = new Scanner(System.in);
         String filePath;
         int rightPathamount=0;
@@ -46,13 +50,19 @@ public class Main {
                         System.out.println(a.getResponceCode());
                         System.out.println(a.getResponceSize());
                         System.out.println(a.getReferer());
-                        System.out.println(a.getUserAgent());
                         System.out.println(a.getUserAgent().getBrowser());
                         System.out.println(a.getUserAgent().getOs());
-
                         System.out.println("----------");
                     }
+
                     System.out.println("Средний трафик в час: " + stats.getTrafficRate() + " байт/час");
+                    //    закомментировано так как переполняет окно вывода
+                    //    System.out.println("Страницы с кодом 200: " + pages);
+
+                    HashMap<String, Double> osStats = stats.getOsStatistic();
+                    osStats.forEach((os, ratio) -> System.out.printf("ОС: %s, Доля: %.2f%%\n", os, ratio * 100));
+                    System.out.println("----------");
+
                 } catch (LongLineException e){System.err.println(e.getMessage());
                 } catch (Exception ex) {
                     System.err.println("Ошибка при чтении файла: " + ex.getMessage());
