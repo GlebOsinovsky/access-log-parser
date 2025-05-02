@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -60,7 +61,11 @@ public class Main {
                     //    System.out.println("Страницы с кодом 200: " + pages);
 
                     HashMap<String, Double> osStats = stats.getOsStatistic();
-                    osStats.forEach((os, ratio) -> System.out.printf("ОС: %s, Доля: %.2f%%\n", os, ratio * 100));
+                    for (Map.Entry<String, Double> entry : osStats.entrySet()) {
+                        String os = entry.getKey();
+                        double ratio = entry.getValue();
+                        System.out.println("ОС: " + os + ", Доля: " + ratio);
+                    }
                     System.out.println("----------");
 
                 } catch (LongLineException e){System.err.println(e.getMessage());
