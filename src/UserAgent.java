@@ -3,11 +3,16 @@ import java.util.Locale;
 public class UserAgent {
     private final String os;
     private final String browser;
+    private final boolean isBot;
 
 
     public UserAgent(String userAgentStr) {
         this.os = parseOS(userAgentStr);
         this.browser = parseBrowser(userAgentStr);
+        this.isBot = userAgentStr.toLowerCase().contains("bot");
+    }
+    public boolean isBot(){
+        return isBot;
     }
 
     private String parseOS(String userAgent){

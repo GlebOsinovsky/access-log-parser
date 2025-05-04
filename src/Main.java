@@ -13,6 +13,7 @@ public class Main {
         HashSet<String>pages = stats.getPages();
         HashSet<String> notFoundPages= stats.getNotFoundPages();
 
+
         Scanner scanner = new Scanner(System.in);
         String filePath;
         int rightPathamount=0;
@@ -56,20 +57,23 @@ public class Main {
                         System.out.println(a.getUserAgent().getBrowser());
                         System.out.println(a.getUserAgent().getOs());
                         System.out.println("----------");
-                    }
 
+                    }
+                    System.out.println("Средняя посещаемость в час(без ботов): "+ stats.getAverageVisitPerHour());
+                    System.out.println("Средняя посещаемость одним пользователем(не бот): "+ stats.getAverageVisitPerUser());
+                    System.out.println("Среднее кол-во ошибочных запросов в час "+stats.getAverageErrorsPerHour());
                     System.out.println("Средний трафик в час: " + stats.getTrafficRate() + " байт/час");
                     //    закомментировано так как переполняет окно вывода
                     //    System.out.println("Страницы с кодом 200: " + pages);
                     System.out.println("Страницы с кодом 404: " + notFoundPages);
 
-                    HashMap<String, Double> osStats = stats.getOsStatistic();
+                    Map<String, Double> osStats = stats.getOsStatistic();
                     for (Map.Entry<String, Double> entry : osStats.entrySet()) {
                         String os = entry.getKey();
                         double ratio = entry.getValue();
                         System.out.println("ОС: " + os + ", Доля: " + ratio);
                     }
-                    HashMap<String,Double> browserStats = stats.getBrowserStatistic();
+                    Map<String,Double> browserStats = stats.getBrowserStatistic();
                     for (Map.Entry<String,Double> entry : browserStats.entrySet()){
                         String browser = entry.getKey();
                         double ratio = entry.getValue();

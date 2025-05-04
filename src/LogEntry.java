@@ -14,7 +14,7 @@ public class LogEntry {
 
     public LogEntry(String line) {
         int firstSpace = line.indexOf(' ');
-         this.ip = line.substring(0, firstSpace);
+        this.ip = line.substring(0, firstSpace);
         String rest = line.substring(firstSpace + 1);
 
         // извлечение двух пропущенных свойств

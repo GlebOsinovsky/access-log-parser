@@ -1,13 +1,13 @@
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Statistics {
+    private List<LogEntry> logEntries = new ArrayList<>();
     private long totalTraffic;
-    private LocalDateTime minTime;
-    private LocalDateTime maxTime;
+    private LocalDateTime minTime = LocalDateTime.MAX;;
+    private LocalDateTime maxTime = LocalDateTime.MIN;
     private HashSet<String> pages;
     private HashMap<String,Integer> osCount;
     private HashSet<String> notFoundPages;
@@ -22,16 +22,13 @@ public class Statistics {
         notFoundPages = new HashSet<>();
         browserCount = new HashMap<>();
     }
+    //получаем данные из логов
     public void addEntry(LogEntry log){
         totalTraffic+=log.getResponceSize();
 
-        LocalDateTime logTime = log.getDateTime();
-        if (logTime.isBefore(minTime)){
-            minTime = logTime;
-        }
-        if (logTime.isAfter(maxTime)){
-            maxTime=logTime;
-        }
+        logEntries.add(log);
+        if (log.getDateTime().isBefore(minTime)) minTime = log.getDateTime();
+        if (log.getDateTime().isAfter(maxTime)) maxTime = log.getDateTime();
         if (log.getResponceCode()==200){
             pages.add(log.getPath());
         }
@@ -43,44 +40,51 @@ public class Statistics {
         String browser = log.getUserAgent().getBrowser();
         browserCount.put(browser,browserCount.getOrDefault(browser,0)+1);
     }
+    //среднее колв-во посещений за час (без ботов)
+    public double getAverageVisitPerHour(){
+        long hours = Duration.between(minTime,maxTime).toHours();
+        if (hours==0) return 0.0;
+        return logEntries.stream().filter(logEntry -> !logEntry.getUserAgent().isBot()).count()/(double) hours;
+    }
+//    среднее кол-во  ошибок в час
+    public double getAverageErrorsPerHour(){
+        long hours = Duration.between(minTime,maxTime).toHours();
+        if (hours==0) return 0.0;
+        return logEntries.stream().filter(logEntry -> logEntry.getResponceCode()>=300 && logEntry.getResponceCode()<600)
+                .count()/(double) hours;
+    }
+//    средняя посещаемость одним юзером
+    public double getAverageVisitPerUser(){
+        long uniqueUser = logEntries.stream().filter(logEntry -> logEntry.getUserAgent().isBot())
+                .map(LogEntry::getIPadress).distinct().count();
+        if (uniqueUser == 0 ) return 0.0;
+        return logEntries.stream().filter(logEntry -> !logEntry.getUserAgent().isBot()).count()/(double) uniqueUser;
+    }
 
     public HashSet<String> getPages() {
         return pages;
     }
+    //получаем страницы с 404
     public HashSet<String> getNotFoundPages(){
         return notFoundPages;
     }
-
-    public HashMap<String,Double> getOsStatistic(){
-        HashMap<String,Double> osStats =new HashMap<>();
-        int total = 0;
-
-        for (int count: osCount.values()){
-            total+=count;
-        }
-        if (total==0) return osStats;
-
-        for (Map.Entry<String,Integer>entry: osCount.entrySet()){
-        double ratio = (double) entry.getValue()/total;
-        osStats.put(entry.getKey(), ratio);
-        }
-        return osStats;
+    //статистика ОС
+    public Map<String,Double> getOsStatistic(){
+        long total = logEntries.size();
+        return logEntries.stream().collect(Collectors.groupingBy(
+                logEntry -> logEntry.getUserAgent().getOs(),
+                Collectors.counting() ))
+                .entrySet().stream().collect(Collectors.toMap(HashMap.Entry::getKey,entry->entry.getValue()/(double)total));
     }
-    public HashMap<String,Double> getBrowserStatistic(){
-        HashMap<String,Double> browserStats = new HashMap<>();
-        int total = 0;
-        for (int count:browserCount.values()){
-            total+=count;
-        }
-        if (total==0) return browserStats;
-        for (Map.Entry<String,Integer>entry: browserCount.entrySet()){
-            double ratio = (double) entry.getValue()/total;
-            browserStats.put(entry.getKey(),ratio);
-        }
-        return browserStats;
+    //статистика браущеров
+    public Map<String,Double> getBrowserStatistic(){
+        long total = logEntries.stream().filter(logEntry -> !logEntry.getUserAgent().isBot()).count();
+        return logEntries.stream().filter(logEntry -> !logEntry.getUserAgent().isBot())
+                .collect(Collectors.groupingBy(logEntry -> logEntry.getUserAgent().getBrowser(),Collectors.counting()))
+                .entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,entry->entry.getValue()/(double) total));
+
     }
-
-
+    //средний трафик в час
     public double getTrafficRate (){
         if (minTime.equals(LocalDateTime.MAX) || maxTime.equals(LocalDateTime.MIN)) {
             return 0.0;
