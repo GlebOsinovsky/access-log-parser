@@ -63,6 +63,9 @@ public class Main {
                     System.out.println("Средняя посещаемость одним пользователем(не бот): "+ stats.getAverageVisitPerUser());
                     System.out.println("Среднее кол-во ошибочных запросов в час "+stats.getAverageErrorsPerHour());
                     System.out.println("Средний трафик в час: " + stats.getTrafficRate() + " байт/час");
+                    System.out.println("Пиковая посещаемость (в секунду): " + stats.getPeakVisitPerSecond());
+                    System.out.println("Домены-рефереры: " + stats.getRefererDomains());
+                    System.out.println("Максимальная посещаемость одним пользователем: " + stats.getMaxVisitsByUser());
                     //    закомментировано так как переполняет окно вывода
                     //    System.out.println("Страницы с кодом 200: " + pages);
                     System.out.println("Страницы с кодом 404: " + notFoundPages);

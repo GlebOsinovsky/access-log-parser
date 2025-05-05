@@ -1,5 +1,8 @@
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,6 +15,8 @@ public class Statistics {
     private HashMap<String,Integer> osCount;
     private HashSet<String> notFoundPages;
     private HashMap<String,Integer> browserCount;
+    private HashMap<Long,Integer> peakVisits;
+    private HashSet<String> refererDomains;
 
     public Statistics() {
         totalTraffic = 0;
@@ -21,6 +26,8 @@ public class Statistics {
         osCount = new HashMap<>();
         notFoundPages = new HashSet<>();
         browserCount = new HashMap<>();
+        peakVisits = new HashMap<>();
+        refererDomains = new HashSet<>();
     }
     //получаем данные из логов
     public void addEntry(LogEntry log){
@@ -29,17 +36,47 @@ public class Statistics {
         logEntries.add(log);
         if (log.getDateTime().isBefore(minTime)) minTime = log.getDateTime();
         if (log.getDateTime().isAfter(maxTime)) maxTime = log.getDateTime();
-        if (log.getResponceCode()==200){
-            pages.add(log.getPath());
-        }
-        if (log.getResponceCode()==404){
-            notFoundPages.add(log.getPath());
+        if (log.getResponceCode()==200)pages.add(log.getPath());
+        if (log.getResponceCode()==404) notFoundPages.add(log.getPath());
+        if (!log.getUserAgent().isBot()){
+            long second = log.getDateTime().toEpochSecond(ZoneOffset.UTC);
+            peakVisits.put(second,peakVisits.getOrDefault(second,0)+1);
         }
         String os = log.getUserAgent().getOs();
         osCount.put(os,osCount.getOrDefault(os,0)+1);
         String browser = log.getUserAgent().getBrowser();
         browserCount.put(browser,browserCount.getOrDefault(browser,0)+1);
+
+        String referer = log.getReferer();
+        if  (referer!=null && !referer.isEmpty()) {
+            try {
+                if (!referer.startsWith("http://") && !referer.startsWith("https://")) referer = "http://" + referer;
+
+                URI uri = new URI(referer);
+                String domain = uri.getHost();
+                if (domain != null) {
+                    if (domain.startsWith("www.")) domain = domain.substring(4);
+                    refererDomains.add(domain);
+                }
+            } catch (URISyntaxException e) {
+                System.err.println("Некорректный referer: " + referer);
+            }
+    }}
+    public HashSet<String> getRefererDomains(){
+        return refererDomains;
     }
+ //максимальная посещаемость одним юзером
+    public int getMaxVisitsByUser(){
+        return logEntries.stream()
+                .filter(logEntry -> !logEntry.getUserAgent().isBot())
+                .collect(Collectors.groupingBy(LogEntry::getIPadress,Collectors.counting()))
+                .values().stream().max(Long::compare).map(Long::intValue).orElse(0);
+    }
+    //пиковая посещаемость за секунду
+    public int getPeakVisitPerSecond(){
+        return peakVisits.values().stream().max(Integer::compare).orElse(0);
+    }
+
     //среднее колв-во посещений за час (без ботов)
     public double getAverageVisitPerHour(){
         long hours = Duration.between(minTime,maxTime).toHours();
